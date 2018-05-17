@@ -12,13 +12,24 @@ use app\widgets\Utils;
 class ConfigController extends Controller
 {
     /**
-     * Displays homepage.
-     *
+     * app config
+     * @return string
+     */
+    public function actionApp() {
+		$config = array(
+			'mallname' => '纯真生活',
+		);
+        $util = new Utils();
+		echo $util->output($config);
+    }
+
+    /**
+     * index page config
      * @return string
      */
     public function actionIndex() {
 		$config = array(
-			'mallname' => '纯真生活',
+			'banners' => '纯真生活',
 		);
         $util = new Utils();
 		echo $util->output($config);
