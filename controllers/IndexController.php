@@ -9,27 +9,14 @@ use app\widgets\AppConst;
 class IndexController extends Controller
 {
     /**
-     * index config
-     * @return string
-     */
-    public function actionConfig() 
-	{
-		$ret = array();
-		$ret = array_merge($ret, AppConst::$mallName);
-		echo Utils::output($ret);
-    }
-
-    /**
      * index page config
      * @return string
      */
     private function actionIndex() 
 	{
-		$config = array(
-			'banners' => '纯真生活',
-		);
-        $util = new Utils();
-		echo $util->output($config);
+		$ret = array();
+		$ret['banners'] = $this->bannersInfo();
+		echo Utils::output($ret);
     }
 
     /**
@@ -37,7 +24,9 @@ class IndexController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin() {
-	echo "hello world";
+    private function bannersInfo() {
+		$banners = array(
+		);
+		return $banners;
     }
 }
