@@ -13,7 +13,7 @@ class Utils {
 			'errno' => $errno,
 			'data' => $ret,
 		);
-		return json_encode($arrRet);
+		return json_encode($arrRet, JSON_UNESCAPED_UNICODE);
     }
 
 
@@ -26,6 +26,9 @@ class Utils {
 		if (intval($type) > 0) 
 		{
 			$id = $type . $id;
+		} else  
+		{
+			$id = 0;
 		}
 		return $id;
     }
