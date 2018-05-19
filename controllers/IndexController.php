@@ -1,33 +1,30 @@
 <?php
-
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
 
 use app\widgets\Utils;
+use app\widgets\AppConst;
 
-class ConfigController extends Controller
+class IndexController extends Controller
 {
     /**
-     * app config
+     * index config
      * @return string
      */
-    public function actionApp() {
-		$config = array(
-			'mallname' => '纯真生活',
-		);
-        $util = new Utils();
-		echo $util->output($config);
+    public function actionConfig() 
+	{
+		$ret = array();
+		$ret = array_merge($ret, AppConst::$mallName);
+		echo Utils::output($ret);
     }
 
     /**
      * index page config
      * @return string
      */
-    public function actionIndex() {
+    private function actionIndex() 
+	{
 		$config = array(
 			'banners' => '纯真生活',
 		);
@@ -43,5 +40,4 @@ class ConfigController extends Controller
     public function actionLogin() {
 	echo "hello world";
     }
-
 }
