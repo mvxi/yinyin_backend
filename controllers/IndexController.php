@@ -16,7 +16,7 @@ class IndexController extends Controller {
     public function actionContent() {
 		$ret = array();
 		$ret['banners'] = $this->bannersInfo();
-		$ret['catagory'] = $this->catagoryInfo();
+		$ret['categories'] = $this->catagoryInfo();
 		echo Utils::output($ret);
     }
     /**
@@ -32,6 +32,23 @@ class IndexController extends Controller {
      * @return Response|string
      */
     private function catagoryInfo() {
-		return AppConst::$indexCatagory;
+		$ret = array();
+		foreach (AppConst::$indexCatagory  as $id=>$name) {
+			$ret[] = array(
+				'id' => $id,
+				'name' => $name,
+			);
+		}
+		return $ret;
+    }
+    /**
+     * index page config
+     * @return string
+     */
+    public function actionNoticeTips() {
+		$ret = array();
+		$ret['banners'] = $this->bannersInfo();
+		$ret['catagory'] = $this->catagoryInfo();
+		echo Utils::output($ret);
     }
 }

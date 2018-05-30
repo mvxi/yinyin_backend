@@ -8,11 +8,11 @@ class AppConst {
 		'mallName' => '本真生活',
 	);
 	public static $indexCatagory = array(
-		'面部护理',
-		'身体护理',
-		'休闲食品',
-		'保健养生',
-		'休闲娱乐',
+		10 => '面部护理' ,
+		11 => '身体护理',
+		12 => '休闲食品',
+		13 => '保健养生',
+		14 => '休闲娱乐',
 	);
 
 	// internal code
@@ -26,7 +26,7 @@ class AppConst {
 		'user' => '11',
 		'order' => '122',
 	);
-	public static $productType = array(
-		'product' => '10',
+	public static $brandCode = array(
+		10 => 'DHC',
 	);
 };
