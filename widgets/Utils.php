@@ -4,13 +4,16 @@ namespace app\widgets;
 use Yii;
 
 class Utils {
+	const RET_SUCCESS = 0;
+	const RET_PARAM_ERROR = 10001;
     /**
      * {@format output}
      */
-    public static function output($ret, $errno=0) 
+    public static function output($ret, $errno=0, $errmsg='') 
     {
 		$arrRet = array(
 			'errno' => $errno,
+			'errmsg' => $errmsg,
 			'data' => $ret,
 		);
 		return json_encode($arrRet, JSON_UNESCAPED_UNICODE);

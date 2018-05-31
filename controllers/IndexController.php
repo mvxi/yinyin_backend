@@ -16,7 +16,7 @@ class IndexController extends Controller {
     public function actionContent() {
 		$ret = array();
 		$ret['banners'] = $this->bannersInfo();
-		$ret['categories'] = $this->catagoryInfo();
+		$ret['product_types'] = $this->productTypeInfo();
 		echo Utils::output($ret);
     }
     /**
@@ -31,9 +31,9 @@ class IndexController extends Controller {
      * get catagorynfo. we can set it manually because of not too many
      * @return Response|string
      */
-    private function catagoryInfo() {
+    private function productTypeInfo() {
 		$ret = array();
-		foreach (AppConst::$indexCatagory  as $id=>$name) {
+		foreach (AppConst::$productType as $id=>$name) {
 			$ret[] = array(
 				'id' => $id,
 				'name' => $name,

@@ -7,7 +7,7 @@ class AppConst {
 	public static $mallName = array(
 		'mallName' => '本真生活',
 	);
-	public static $indexCatagory = array(
+	public static $productType = array(
 		10 => '面部护理' ,
 		11 => '身体护理',
 		12 => '休闲食品',
