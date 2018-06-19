@@ -17,7 +17,7 @@ class AppConst {
 
 	// internal code
 	public static $indexBanners = array(
-		'105b0019c0dcceb',
+		'105b18d482d8664',
 		'105b003b89a5e19',
 		'105b003c3cb5a91',	
 	);

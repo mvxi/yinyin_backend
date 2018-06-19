@@ -39,6 +39,8 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => ['*'],
+                    'logFile' => '@runtime/logs/yinyin.log',
                 ],
             ],
         ],
