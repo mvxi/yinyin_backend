@@ -35,4 +35,19 @@ class Utils {
 		}
 		return $id;
     }
+    /**
+     * load configs from app.conf
+     */
+    public static function getConf() {
+		$xml = '/home/dodo/runtime/conf/yinyin/app.conf';
+    	if (file_exists	($xml)) {  
+    	    libxml_disable_entity_loader(false);  
+    	    $xml_string = simplexml_load_file($xml,'SimpleXMLElement', LIBXML_NOCDATA);  
+    	}else{  
+    	    libxml_disable_entity_loader(true);  
+    	    $xml_string = simplexml_load_string($xml,'SimpleXMLElement', LIBXML_NOCDATA);  
+    	}  
+    	$result = json_decode(json_encode($xml_string),true);  
+    	return $result; 
+	}
 };

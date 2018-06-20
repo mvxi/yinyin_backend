@@ -28,12 +28,14 @@ class AppController extends Controller
 		$request = Yii::$app->request;
 		$code = $request->get('code');
 
+		$conf = Utils::getConf();
+		$wxLoginUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$conf['appid'].'&secret='.$conf['appsecret'].'SECRET&js_code='.$code.'&grant_type=authorization_code';
+
+		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl);
 
 		$curl = new curl\Curl();
-        //get http://example.com/
-        $response = $curl->post('http://example.com');
+        $response = $curl->get($wxLoginUrl);
 		Yii::warning('aaaaaaaaaaa  res:'.serialize($response));
-
         // List of status codes here http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         switch ($curl->responseCode) {
 
@@ -50,7 +52,6 @@ class AppController extends Controller
                 break;
         }
 		echo $response;
-
     }
 
 }
