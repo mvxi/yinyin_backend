@@ -6,6 +6,7 @@ use Yii;
 class Utils {
 	const RET_SUCCESS = 0;
 	const RET_PARAM_ERROR = 10001;
+	const RET_CALL_WX_ERROR = 10002;
     /**
      * {@format output}
      */

@@ -29,29 +29,32 @@ class AppController extends Controller
 		$code = $request->get('code');
 
 		$conf = Utils::getConf();
-		$wxLoginUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$conf['appid'].'&secret='.$conf['appsecret'].'SECRET&js_code='.$code.'&grant_type=authorization_code';
+		$wxLoginUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$conf['appid'].'&secret='.$conf['appsecret'].'&js_code='.$code.'&grant_type=authorization_code';
 
 		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl);
 
 		$curl = new curl\Curl();
-        $response = $curl->get($wxLoginUrl);
-		Yii::warning('aaaaaaaaaaa  res:'.serialize($response));
-        // List of status codes here http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+        $res = $curl->get($wxLoginUrl);
+		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res));
+		
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
         switch ($curl->responseCode) {
-
             case 'timeout':
-                //timeout error logic here
+				$errno = Utils::RET_CALL_WX_ERROR;
+				$errmsg = '请求微信服务超时';
                 break;
-                
             case 200:
-                //success logic here
+				$arrRes = json_decode($res, true);
+				$ret['openid'] = $arrRes['openid'];
                 break;
-
             case 404:
-                //404 Error logic here
+				$errno = Utils::RET_CALL_WX_ERROR;
+				$errmsg = '微信服务异常';
                 break;
         }
-		echo $response;
+		echo Utils::output($ret, $errno, $errmsg);
     }
 
 }
