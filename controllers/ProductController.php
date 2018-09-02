@@ -24,7 +24,7 @@ class ProductController extends Controller {
 		if (intval($productTypeID) > 0) {
 			$productList = ProductInfo::find()->where(array('product_type' => $productTypeID))->orderBy('id ASC')->offset($offset * $limit)->limit($limit)->asArray()->all();
 		}
-		echo Utils::output($ret);
+		echo Utils::output($productList);
     }
 
     /**
