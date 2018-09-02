@@ -40,7 +40,7 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                     'logVars' => ['*'],
-                    'logFile' => '@runtime/logs/yinyin.log'.date('Ymd'),
+                    'logFile' => '@runtime/logs/yinyin.log.'.date('Ymd'),
                     'maxFileSize' => 1024 * 2,
                     'maxLogFiles' => 20,
                 ],
@@ -65,7 +65,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1', '123.116.253.231'],
     ];
 
     $config['bootstrap'][] = 'gii';
