@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use app\widgets\Utils;
 use app\widgets\AppConst;
+use app\widgets\SessionKey;
 use yii\curl;
 
 class AppController extends Controller
@@ -20,6 +21,9 @@ class AppController extends Controller
 		echo Utils::output($ret);
     }
 
+	private function getYuid($sk, $openid) {
+		SessionKey::set($sk, $openid);	
+	}
     /**
      * user login
      * @return string
@@ -47,7 +51,7 @@ class AppController extends Controller
                 break;
             case 200:
 				$arrRes = json_decode($res, true);
-				$ret['openid'] = $arrRes['openid'];
+				$ret['yuid'] = $this->getYuid($arrRes['session_key'], $arrRes['openid']);
                 break;
             case 404:
 				$errno = Utils::RET_CALL_WX_ERROR;

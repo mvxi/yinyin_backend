@@ -21,6 +21,7 @@ class AppConst {
 		'105b003b89a5e19',
 		'105b003c3cb5a91',	
 	);
+	//generate object unique codes with objecttype as prefix
 	public static $objectType = array(
 		'product' => '10',
 		'user' => '11',
