@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use Yii;
 use yii\web\Controller;
 
 use app\widgets\Utils;
@@ -67,5 +68,18 @@ class InputController extends Controller
 		$url = json_decode($product->pic_url);
 		$product->pic_url = $url[0];
 		$product->save();
+    }
+
+    public function actionAddredis() 
+	{
+		$source = Yii::$app->redis->set('var1','asdasd');
+		echo 'success';
+
+    }
+    public function actionGetredis() 
+	{
+		$source = Yii::$app->redis->get('var1');
+		var_dump($source);
+
     }
 }
