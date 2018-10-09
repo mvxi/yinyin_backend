@@ -14,7 +14,7 @@ class SessionKey
      */
     public static function set($sk, $openid) 
     {
-		$value = $sk.','.$openid;
+		$info = $sk.','.$openid;
 		$yuid = Utils::idgen(AppConst::$objectType['user']);
 		$key = $yuid.self::SESSION_KEY_PREFIX;
 		$res = Yii::$app->redis->set($key, $info);

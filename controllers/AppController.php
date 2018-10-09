@@ -22,7 +22,7 @@ class AppController extends Controller
     }
 
 	private function getYuid($sk, $openid) {
-		SessionKey::set($sk, $openid);	
+		return SessionKey::set($sk, $openid);	
 	}
     /**
      * user login
@@ -35,11 +35,8 @@ class AppController extends Controller
 		$conf = Utils::getConf();
 		$wxLoginUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$conf['appid'].'&secret='.$conf['appsecret'].'&js_code='.$code.'&grant_type=authorization_code';
 
-		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl);
-
 		$curl = new curl\Curl();
         $res = $curl->get($wxLoginUrl);
-		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res));
 		
 		$ret = array();
 		$errno = Utils::RET_SUCCESS;
@@ -58,6 +55,7 @@ class AppController extends Controller
 				$errmsg = '微信服务异常';
                 break;
         }
+		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   yuid:'.$ret['yuid'] );
 		echo Utils::output($ret, $errno, $errmsg);
     }
 
