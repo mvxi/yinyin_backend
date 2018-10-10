@@ -21,8 +21,12 @@ class AppController extends Controller
 		echo Utils::output($ret);
     }
 
-	private function getYuid($sk, $openid) {
-		return SessionKey::set($sk, $openid);	
+	private function getYuid($sk, $openid, $yuserInfo, $yuid='') {
+		$retYuid = $yuid;
+		if (empty($yuserInfo) || strval($yuserInfo['sk'])!=$sk) {
+			$retYuid = SessionKey::set($sk, $openid, $yuid);	
+		}
+		return $retYuid;
 	}
     /**
      * user login
@@ -30,7 +34,14 @@ class AppController extends Controller
      */
     public function actionLogin() {
 		$request = Yii::$app->request;
-		$code = $request->get('code');
+		$code = $request->get('code', '');
+		$yuid = $request->get('yuid');
+		$userHost = $request->userHost;
+		$userIP = $request->userIP;
+		$yuserInfo = array();
+		if (!empty($yuid)) {
+			$yuserInfo = SessionKey::get($yuid);	
+		} 
 
 		$conf = Utils::getConf();
 		$wxLoginUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid='.$conf['appid'].'&secret='.$conf['appsecret'].'&js_code='.$code.'&grant_type=authorization_code';
@@ -48,14 +59,20 @@ class AppController extends Controller
                 break;
             case 200:
 				$arrRes = json_decode($res, true);
-				$ret['yuid'] = $this->getYuid($arrRes['session_key'], $arrRes['openid']);
+				$ret['yuid'] = $this->getYuid($arrRes['session_key'], $arrRes['openid'], $yuserInfo, $yuid);
+				/*
+				if ($arrRes['errcode'] == 0) {
+					$ret['yuid'] = $this->getYuid($arrRes['session_key'], $arrRes['openid'], $yuserInfo, $yuid);
+				} else {
+				}
+				*/
                 break;
             case 404:
 				$errno = Utils::RET_CALL_WX_ERROR;
 				$errmsg = '微信服务异常';
                 break;
         }
-		Yii::warning('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   yuid:'.$ret['yuid'] );
+		Yii::info('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   newyuid:'.$ret['yuid'].'   oldyuid:'.$yuid.'   ip:'.$userIP.'   host:'.$userHost);
 		echo Utils::output($ret, $errno, $errmsg);
     }
 

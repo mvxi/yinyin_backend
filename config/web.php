@@ -39,7 +39,8 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info', 'trace'],
+                    //'levels' => ['error', 'warning','info'],
                     'logVars' => ['*'],
                     'logFile' => '@runtime/logs/yinyin.log.'.date('Ymd'),
                     'maxFileSize' => 1024 * 2,

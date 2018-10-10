@@ -78,7 +78,7 @@ class InputController extends Controller
     }
     public function actionGetredis() 
 	{
-		$source = Yii::$app->redis->get('var1');
+		$source = Yii::$app->redis->get('115bbc6e6264a87_sk');
 		var_dump($source);
 
     }
