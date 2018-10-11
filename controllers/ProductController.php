@@ -54,4 +54,34 @@ class ProductController extends Controller {
 		}
 		echo Utils::output($ret, $errno, $errmsg);
 	}
+    /**
+	 * @check product info
+     * @return string
+     */
+    public function actionBuyCheck()  {
+		$request = Yii::$app->request;
+		$productIds = $request->get('product_ids');
+		$arrIds = explode(',', $productIds);
+		$params = array();
+		$params[] = 'or';
+		foreach ($arrIds as $productId) {
+			$params[] = 'product_id = '.$productId;
+		}
+
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = array();
+		if (!empty($params)) {
+			$productInfos = ProductInfo::find()->where($params)->asArray()->one();
+			foreach ($productInfos as $productInfo) {
+				$checkInfo = array();
+				$checkInfo['id'] = $productInfo['id'];
+				$checkInfo['product_id'] = $productInfo['product_id'];
+				$checkInfo['sell_price'] = $productInfo['sell_price'];
+				$checkInfo['sell_price'] = $productInfo['sell_price'];
+				$ret[] = $checkInfo;
+			}
+		}
+		echo Utils::output($ret, $errno, $errmsg);
+	}
 }
