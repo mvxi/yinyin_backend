@@ -65,20 +65,21 @@ class ProductController extends Controller {
 		$params = array();
 		$params[] = 'or';
 		foreach ($arrIds as $productId) {
-			$params[] = 'product_id = '.$productId;
+			$params[] = array('=', 'product_id', $productId);
 		}
 
 		$errno = Utils::RET_SUCCESS;
 		$errmsg = '';
 		$ret = array();
 		if (!empty($params)) {
-			$productInfos = ProductInfo::find()->where($params)->asArray()->one();
+			$productInfos = ProductInfo::find()->where($params)->asArray()->all();
+			Yii::trace('===> check:'.serialize($productInfos).'    ids:'.serialize($arrIds));
 			foreach ($productInfos as $productInfo) {
 				$checkInfo = array();
 				$checkInfo['id'] = $productInfo['id'];
 				$checkInfo['product_id'] = $productInfo['product_id'];
 				$checkInfo['sell_price'] = $productInfo['sell_price'];
-				$checkInfo['sell_price'] = $productInfo['sell_price'];
+				$checkInfo['stock_count'] = $productInfo['stock_count'];
 				$ret[] = $checkInfo;
 			}
 		}
