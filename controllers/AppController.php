@@ -69,7 +69,7 @@ class AppController extends Controller
                 break;
         }
 		//
-		Yii::info('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   newyuid:'.$ret['yuid'].'   oldyuid:'.$yuid);
+		Yii::info('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   newyuid:'.$ret['yuid'].'   oldyuid:'.$yuid.'   new_sk:'.$arrRes['session_key'].'     old_sk:'.$yuserInfo['sk']);
 		return $ret;
 	}
 
