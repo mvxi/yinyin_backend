@@ -28,16 +28,12 @@ class AppController extends Controller
 		}
 		return $retYuid;
 	}
+
     /**
-     * user login
+     * get wx user info by jscode2session
      * @return string
      */
-    public function actionLogin() {
-		$request = Yii::$app->request;
-		$code = $request->get('code', '');
-		$yuid = $request->get('yuid');
-		$userHost = $request->userHost;
-		$userIP = $request->userIP;
+	private function getWXInfo($code, $yuid='') {
 		$yuserInfo = array();
 		if (!empty($yuid)) {
 			$yuserInfo = SessionKey::get($yuid);	
@@ -72,8 +68,27 @@ class AppController extends Controller
 				$errmsg = '微信服务异常';
                 break;
         }
-		Yii::info('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   newyuid:'.$ret['yuid'].'   oldyuid:'.$yuid.'   ip:'.$userIP.'   host:'.$userHost);
+		//
+		Yii::info('wx usercode :'. $code.'   login url:'.$wxLoginUrl.'     response:'.serialize($res).'   newyuid:'.$ret['yuid'].'   oldyuid:'.$yuid);
+		return $ret;
+	}
+
+    /**
+     * user login
+     * @return string
+     */
+    public function actionLogin() {
+		$request = Yii::$app->request;
+		$code = $request->get('code', '');
+		$yuid = $request->get('yuid', '');
+		$userHost = $request->userHost;
+		$userIP = $request->userIP;
+		Yii::info('login params  code:'.$code.'   yuid:'.$yuid.'   host:'.$userHost.'   ip:'.$userIP);
+		
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = $this->getWXInfo($code, $yuid);
 		echo Utils::output($ret, $errno, $errmsg);
     }
-
 }

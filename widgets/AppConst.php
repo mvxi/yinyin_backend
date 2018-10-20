@@ -25,7 +25,9 @@ class AppConst {
 	public static $objectType = array(
 		'product' => '10',
 		'user' => '11',
-		'order' => '122',
+		'order' => '12',
+		'code' => '13',
+		'address' => '14',
 	);
 	public static $brandCode = array(
 		10 => 'DHC',

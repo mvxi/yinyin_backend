@@ -82,4 +82,9 @@ class InputController extends Controller
 		var_dump($source);
 
     }
+
+    public function actionGetAdd() 
+	{
+		UserInfo::findBySql('')->one();
+    }
 }
