@@ -28,14 +28,16 @@ class SessionKey
 	
     public static function get($yuid) 
     {
-		$key = $yuid.self::SESSION_KEY_PREFIX;
 		$ret = array();
-		$source = Yii::$app->redis->get($key);
-		if (!empty($source)) 
-		{
-			$arrSource = explode(',', $source);
-			$ret['sk'] = $arrSource[0];
-			$ret['openid'] = $arrSource[1];
+		if (!empty($yuid)) {
+			$key = $yuid.self::SESSION_KEY_PREFIX;
+			$source = Yii::$app->redis->get($key);
+			if (!empty($source)) 
+			{
+				$arrSource = explode(',', $source);
+				$ret['sk'] = $arrSource[0];
+				$ret['openid'] = $arrSource[1];
+			}
 		}
 		return $ret;
 	}

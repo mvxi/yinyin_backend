@@ -4,7 +4,6 @@ namespace app\widgets;
 use Yii;
 
 class Spam {
-	const RET_SUCCESS = 0;
     /**
      * {@format output}
      */

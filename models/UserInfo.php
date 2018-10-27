@@ -8,6 +8,6 @@ class UserInfo extends ActiveRecord
 {
 	public static function tableName() 
 	{
-		return 'product_info';
+		return 'user_info';
 	}
 }

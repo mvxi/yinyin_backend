@@ -1,22 +1,24 @@
 <?php
 namespace app\controllers;
 
+use Yii;
 use yii\web\Controller;
-
 use app\widgets\Utils;
 use app\widgets\AppConst;
+use app\widgets\SessionKey;
 
+use app\models\UserInfo;
 
 class UserController extends Controller {
     /**
      * add a new address
      * @return string
      */
-    public function actionAddressAdd() {
+    private function setAddress($isAdd = true) {
 		$request = Yii::$app->request;
 		$yuid = $request->get('yuid', '');
 		$addressId = $request->get('addressId', '');
-		$proviceId = $request->get('proviceId', 0);
+		$provinceId = $request->get('provinceId', 0);
 		$cityId = $request->get('cityId', 0);
 		$districtId = $request->get('districtId', 0);
 		$address = $request->get('address', '');
@@ -25,28 +27,122 @@ class UserController extends Controller {
 		$isDefault = $request->get('isDefault', 0);
 		$cp = $request->get('linkMan', '');  //contract person
 		
-		$userInfo = UserInfo::find()->where(array('yuid' => $yuid))->asArray()->one();
-		if ($addressId == '') {
-		} else {
-		}
-	    	
 		$ret = array();
-		$ret['banners'] = $this->bannersInfo();
-		$ret['product_types'] = $this->productTypeInfo();
-		echo Utils::output($ret);
+		$yuserInfo = SessionKey::get($yuid);	
+		if (!empty($yuserInfo)) {
+			$userInfo = UserInfo::find()->where(array('open_id' => $yuserInfo['openid']))->one();
+			Yii::trace('setaddress  yuid:'.$yuid.'   yuserinfo:'.serialize($yuserInfo).'    ret_userinfo:'.serialize($userInfo));
+			if (!empty($userInfo)) {
+				$isNew = true;
+				$arrAddress = json_decode($userInfo->address, true);
+				if (empty($arrAddress)) {
+					$arrAddress = array();
+				}
+				foreach ($arrAddress as &$addItem) {
+					if ($addItem['addressId'] == $addressId) {
+						$isNew = false;
+						$addItem['addressId'] = $addressId;
+						$addItem['provinceId'] = $provinceId;
+						$addItem['cityId'] = $cityId;
+						$addItem['address'] = $address;
+						$addItem['districtId'] = $districtId;
+						$addItem['mobile'] = $mobile;
+						$addItem['code'] = $code;
+						$addItem['isDefault'] = $isDefault;
+						$addItem['cp'] = $cp;
+					}
+				}
+				if ($isNew) {
+					$arrAddress[] = array(
+						'addressId' => Utils::idgen(AppConst::$objectType['address']),
+						'provinceId' => $provinceId,
+						'cityId' => $cityId,
+						'address' => $address,
+						'districtId' => $districtId,
+						'mobile' => $mobile,
+						'code' => $code,
+						'isDefault' => $isDefault,
+						'cp' => $cp,
+					);
+				}
+				$userInfo->address = json_encode($arrAddress);
+				$userInfo->save();
+			}
+		}
+		Yii::info('address update yuid:'.$yuid.'   addressid:'.$addressId.'  provinceid:'.$provinceId.'   cityid:'.$cityId .'   districtid:'.$districtId.'   address:'.$address.'   mobile:'.$mobile.'   code:'.$code.'   cp:'.$cp.'  openid:' );
+	}
+
+    /**
+     * get  address list
+     * @return string
+     */
+    private function getAddressList() {
+		$request = Yii::$app->request;
+		$yuid = $request->get('yuid', '');
+
+		$arrAddress = array();
+		$yuserInfo = SessionKey::get($yuid);	
+		if (!empty($yuserInfo)) {
+			$userInfo = UserInfo::find()->where(array('open_id' => $yuserInfo['openid']))->one();
+			Yii::trace('setaddress  yuid:'.$yuid.'   yuserinfo:'.serialize($yuserInfo).'    ret_userinfo:'.serialize($userInfo));
+			if (!empty($userInfo)) {
+				$isNew = true;
+				$arrAddress = json_decode($userInfo->address, true);
+				if (empty($arrAddress)) {
+					$arrAddress = array();
+				}
+			}
+		}
+		return $arrAddress;
+	}
+
+    /**
+     * add a new address
+     * @return string
+     */
+    public function actionAddressAdd() {
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = $this->setAddress();
+		echo Utils::output($ret, $errno, $errmsg);
     }
     /**
      * update address info
      * @return string
      */
     public function actionAddressUpdate() {
-		$request = Yii::$app->request;
-		$yuid = $request->get('yuid', '');
-		$openId = $request->get('open_id', '');
-		$buyCount = $request->get('buy_count', 10);
 		$ret = array();
-		$ret['banners'] = $this->bannersInfo();
-		$ret['product_types'] = $this->productTypeInfo();
-		echo Utils::output($ret);
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = $this->setAddress(false);
+		echo Utils::output($ret, $errno, $errmsg);
+    }
+    /**
+     * get address list
+     * @return string
+     */
+    public function actionAddressGetList() {
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = $this->getAddressList();
+		echo Utils::output($ret, $errno, $errmsg);
+    }
+    /**
+     * get address list
+     * @return string
+     */
+    public function actionAddressGetDefault() {
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$list = $this->getAddressList();
+		foreach ($list as $item) {
+			if ($item['isDefault'] == 'true') {
+				$ret = $item;
+			}
+		}
+		echo Utils::output($ret, $errno, $errmsg);
     }
 }

@@ -8,13 +8,11 @@ use app\widgets\Utils;
 use app\widgets\AppConst;
 
 use app\models\ProductInfo;
+use app\models\UserInfo;
 
 class InputController extends Controller
 {
-    /**
-     * index page config
-     * @return string
-     */
+///////////  product 
     public function actionAdd() 
 	{
 		$product = new  ProductInfo();
@@ -32,10 +30,6 @@ class InputController extends Controller
 		$product->save();
 		echo 'success';
     }
-    /**
-     * update the format of pic_url from raw to json
-     * @return string
-     */
     public function actionUpdate() 
 	{
 		$arr = array();
@@ -45,10 +39,6 @@ class InputController extends Controller
 		$product->save();
 		echo $product->pic_url;
     }
-    /**
-     * update the format of pic_url from raw to json
-     * @return string
-     */
     public function actionRead() 
 	{
 		$arr = array();
@@ -56,11 +46,6 @@ class InputController extends Controller
 		$url = json_decode($product->pic_url);
 		echo $url[0];
     }
-    /**
-[
-     * update the format of pic_url from raw to json
-     * @return string
-     */
     public function actionRecovery() 
 	{
 		$arr = array();
@@ -70,6 +55,7 @@ class InputController extends Controller
 		$product->save();
     }
 
+///////////   redis
     public function actionAddredis() 
 	{
 		$source = Yii::$app->redis->set('var1','asdasd');
@@ -83,8 +69,24 @@ class InputController extends Controller
 
     }
 
+//////////// user
     public function actionGetAdd() 
 	{
 		UserInfo::findBySql('')->one();
+    }
+
+    public function actionUserAdd() 
+	{
+
+		$user = new  UserInfo();
+		$user->open_id = '022wmfGH1tSSF70KvoIH1WW4GH1wmfGH';
+		$user->share_code = 'share_code0';
+		$user->share_code1 = 'share_code1';
+		$user->address = '北京市海淀区上地十街10号';
+		$user->yuid = '115bcd4809d3c51';
+		$user->wx_name = '小五花肉1';
+
+		$user->save();
+		echo 'success';
     }
 }

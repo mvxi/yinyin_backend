@@ -7,6 +7,11 @@ class Utils {
 	const RET_SUCCESS = 0;
 	const RET_PARAM_ERROR = 10001;
 	const RET_CALL_WX_ERROR = 10002;
+	const RET_LOGIN_FAIL = 10003; 		// cannot get openid and sk from redis. wx client is required to login again
+
+	const RET_MSG = array(
+		self::RET_LOGIN_FAIL => '登录错误',
+	);
     /**
      * {@format output}
      */
