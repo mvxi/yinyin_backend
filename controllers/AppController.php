@@ -9,6 +9,7 @@ use app\widgets\AppConst;
 use app\widgets\SessionKey;
 use yii\curl;
 
+use app\models\UserInfo;
 class AppController extends Controller
 {
     /**
@@ -25,6 +26,18 @@ class AppController extends Controller
 		$retYuid = $yuid;
 		if (empty($yuserInfo) || strval($yuserInfo['sk'])!=$sk) {
 			$retYuid = SessionKey::set($sk, $openid, $yuid);	
+		}
+		if (empty($yuserInfo) && !empty($retYuid)) {   //openid stored into db
+			$userInfo = UserInfo::find()->where(array('open_id' => $openid))->one();
+			if (empty($userInfo)) {
+				$userInfo = new UserInfo;
+				$userInfo->yuid = $retYuid;
+				$userInfo->open_id = $openid;
+				$userInfo->save();
+			} else {
+				$userInfo->yuid = $retYuid;
+				$userInfo->save();
+			}
 		}
 		return $retYuid;
 	}
