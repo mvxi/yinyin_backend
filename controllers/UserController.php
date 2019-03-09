@@ -79,6 +79,7 @@ class UserController extends Controller {
     private function getAddressList() {
 		$request = Yii::$app->request;
 		$yuid = $request->get('yuid', '');
+		$addressId = $request->get('addressId', '');
 
 		$arrAddress = array();
 		$yuserInfo = SessionKey::get($yuid);	
@@ -87,14 +88,55 @@ class UserController extends Controller {
 			Yii::trace('setaddress  yuid:'.$yuid.'   yuserinfo:'.serialize($yuserInfo).'    ret_userinfo:'.serialize($userInfo));
 			if (!empty($userInfo)) {
 				$isNew = true;
-				$arrAddress = json_decode($userInfo->address, true);
-				if (empty($arrAddress)) {
+				$arrAddressTemp = json_decode($userInfo->address, true);
+				if (empty($arrAddressTemp)) {
 					$arrAddress = array();
+				} else if ($addressId != '') {
+					foreach($arrAddressTemp as $addressItem) {
+						if ($addressId == $addressItem['addressId']) {
+							$arrAddress[] = $addressItem;
+						}
+					}
+				} else {
+					$arrAddress = $arrAddressTemp;
 				}
 			}
 		}
 		return $arrAddress;
 	}
+
+    /**
+     * del  address list
+     * @return string
+     */
+    private function delAddress() {
+		$request = Yii::$app->request;
+		$yuid = $request->get('yuid', '');
+		$addressId = $request->get('addressId', '');
+		$ret = false;
+		$yuserInfo = SessionKey::get($yuid);	
+		if (!empty($yuserInfo)) {
+			$userInfo = UserInfo::find()->where(array('open_id' => $yuserInfo['openid']))->one();
+			Yii::trace('deldress  yuid:'.$yuid.'  addressId:'.$addressId.'   yuserinfo:'.serialize($yuserInfo).'    ret_userinfo:'.serialize($userInfo));
+			if (!empty($userInfo)) {
+				$arrAddress = json_decode($userInfo->address, true);
+				if (empty($arrAddress)) {
+					$arrAddress = array();
+				}
+				$arrAddressNew = array();
+				foreach ($arrAddress as $addItem) {
+					if ($addItem['addressId'] != $addressId) {
+						$arrAddressNew[] = $addItem;
+					}
+				}
+				$userInfo->address = json_encode($arrAddressNew);
+				$userInfo->save();
+				$ret = true;
+			}
+		}
+		return $ret;
+	}
+
 
     /**
      * add a new address
@@ -143,6 +185,17 @@ class UserController extends Controller {
 				$ret = $item;
 			}
 		}
+		echo Utils::output($ret, $errno, $errmsg);
+    }
+    /**
+     * delete address 
+     * @return string
+     */
+    public function actionAddressDel() {
+		$ret = array();
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		$ret = $this->delAddress();
 		echo Utils::output($ret, $errno, $errmsg);
     }
 }
