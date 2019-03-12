@@ -181,7 +181,7 @@ class UserController extends Controller {
 		$errmsg = '';
 		$list = $this->getAddressList();
 		foreach ($list as $item) {
-			if ($item['isDefault'] == 'true') {
+			if ($item['isDefault'] == '1') {
 				$ret = $item;
 			}
 		}
