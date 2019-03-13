@@ -32,4 +32,14 @@ class AppConst {
 	public static $brandCode = array(
 		10 => 'DHC',
 	);
+
+	// http://www.cnstorm.com/index.php?route=information/help&line=20_41
+	public static $orderStatus = array(
+		'PP' => '1',  //pending payment
+		'PR' => '2',  //processing
+		'SH' =>  '3',  //shipped
+		'CO' => '4', // completed
+		'CA' => '5',  //canceled
+		'VO' => '6',  //voided
+	);
 };

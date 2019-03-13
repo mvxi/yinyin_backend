@@ -183,6 +183,7 @@ class UserController extends Controller {
 		foreach ($list as $item) {
 			if ($item['isDefault'] == '1') {
 				$ret = $item;
+				break;
 			}
 		}
 		echo Utils::output($ret, $errno, $errmsg);

@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use Yii;
 use yii\web\Controller;
 
 use app\widgets\Utils;
@@ -13,11 +14,16 @@ class OrderController extends Controller {
      * index page config
      * @return string
      */
-    public function actionCommit() {
+    public function actionCreate() {
 		$request = Yii::$app->request;
-		$productTypeID = $request->get('product_id', '');
-		$openId = $request->get('open_id', '');
-		$buyCount = $request->get('buy_count', 10);
+		$yuid = $request->post('yuid', '');
+		$productsInfo = $request->post('productsInfo', '');
+		$remark = $request->post('remark', '');
+		Yii::info('order-create yuid:'.$yuid.'  productsInfo:'.$productsInfo .'   remark:'.$remark );
+		$order = new  OrderInfo();
+		$order->order_id = Utils::idgen(AppConst::$objectType['order']);
+		$order->products_info = $productsInfo;
+		$order->remark = $remark;
 		$ret = array();
 		$ret['banners'] = $this->bannersInfo();
 		$ret['product_types'] = $this->productTypeInfo();
@@ -55,14 +61,8 @@ class OrderController extends Controller {
 		}
 		return $ret;
     }
-    /**
-     * index page config
-     * @return string
-     */
-    public function actionNoticeTips() {
-		$ret = array();
-		$ret['banners'] = $this->bannersInfo();
-		$ret['catagory'] = $this->catagoryInfo();
-		echo Utils::output($ret);
-    }
+
+	public function init(){
+	    $this->enableCsrfValidation = false;
+	}
 }
