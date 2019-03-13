@@ -4,10 +4,11 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 
+use app\widgets\SessionKey;
 use app\widgets\Utils;
 use app\widgets\AppConst;
 
-use app\models\ProductInfo;
+use app\models\OrderInfo;
 
 class OrderController extends Controller {
     /**
@@ -20,14 +21,25 @@ class OrderController extends Controller {
 		$productsInfo = $request->post('productsInfo', '');
 		$remark = $request->post('remark', '');
 		Yii::info('order-create yuid:'.$yuid.'  productsInfo:'.$productsInfo .'   remark:'.$remark );
+
+		$yuserInfo = array();
+		if (!empty($yuid)) {
+			$yuserInfo = SessionKey::get($yuid);	
+		} 
+
 		$order = new  OrderInfo();
 		$order->order_id = Utils::idgen(AppConst::$objectType['order']);
 		$order->products_info = $productsInfo;
 		$order->remark = $remark;
+		$order->create_time = time();
+		$order->open_id= $yuserInfo['openid'];
+		$order->status = AppConst::$orderStatus['PP'];
+		$order->save();
+
 		$ret = array();
-		$ret['banners'] = $this->bannersInfo();
-		$ret['product_types'] = $this->productTypeInfo();
-		echo Utils::output($ret);
+		$errno = Utils::RET_SUCCESS;
+		$errmsg = '';
+		echo Utils::output($ret, $errno, $errmsg);
     }
     /**
      * index page config
